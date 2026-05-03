@@ -48,6 +48,7 @@ const state = {
   achievements: []
 };
 
+let autoSyncTimeout = null;
 const page = window.location.pathname.split('/').pop() || 'index.html';
 
 function loadStorage(key, fallback) {
@@ -232,6 +233,14 @@ function persist() {
   saveStorage(DB.requests, state.requests);
   saveStorage(DB.shop, state.shop);
   saveStorage(DB.achievements, state.achievements);
+  
+  // Автосохранение на GitHub с дебаунсом
+  if (GITHUB_CONFIG.token && GITHUB_CONFIG.password) {
+    clearTimeout(autoSyncTimeout);
+    autoSyncTimeout = setTimeout(() => {
+      persistToGitHub().catch(e => console.error('Auto-sync error:', e));
+    }, 3000); // Сохранить на GitHub через 3 секунды после последнего изменения
+  }
 }
 
 async function persistToGitHub() {
@@ -287,6 +296,25 @@ function initData() {
     };
     state.users.push(admin);
     persist();
+  }
+
+  // Загрузка с GitHub в фоне (если подключен)
+  if (GITHUB_CONFIG.token && GITHUB_CONFIG.gistId && GITHUB_CONFIG.password) {
+    loadFromGitHub(GITHUB_CONFIG.password).then(data => {
+      if (data) {
+        state.users = data.users;
+        state.messages = data.messages;
+        state.direct = data.direct;
+        state.posts = data.posts;
+        state.comments = data.comments;
+        state.notifications = data.notifications;
+        state.requests = data.requests;
+        state.shop = data.shop;
+        state.achievements = data.achievements;
+        persist();
+        location.reload(); // Перезагрузить страницу с актуальными данными
+      }
+    }).catch(e => console.log('GitHub load on init failed:', e));
   }
 
   if (page === 'index.html' && currentUser()) {
