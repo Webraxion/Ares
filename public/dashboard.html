@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARES | Панель</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-dashboard">
+  <header class="site-header">
+    <a class="brand" href="dashboard.html">ARES</a>
+    <nav class="main-nav">
+      <a href="dashboard.html" class="active">Домашняя</a>
+      <a href="profile.html">Профиль</a>
+      <a href="chat.html">Чат</a>
+      <a href="feed.html">Лента</a>
+      <a href="friends.html">Друзья</a>
+      <a href="shop.html">Магазин</a>
+      <a href="admin.html" id="adminLink">Админ</a>
+    </nav>
+    <button class="btn btn-secondary" id="logoutBtn">Выйти</button>
+  </header>
+  <main class="page-shell">
+    <section class="section hero-panel dark-surface">
+      <div class="hero-copy">
+        <span class="eyebrow">Кабинет командира</span>
+        <h1>Добро пожаловать, <span class="current-user-name"></span></h1>
+        <p>Это сердце закрытой сети ARES: твой статус, личный стиль и путь к достижению репутации.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card"><span class="current-user-balance">0 кредитов</span><small>Баланс</small></div>
+        <div class="stat-card"><span class="current-user-rank">Новобранец</span><small>Звание</small></div>
+      </div>
+      <div class="hero-sync">
+        <button class="btn btn-secondary" id="syncToGithubBtn" title="Сохранить зашифрованные данные на GitHub">💾 GitHub</button>
+        <button class="btn btn-secondary" id="syncFromGithubBtn" title="Загрузить данные с GitHub">📥 GitHub</button>
+      </div>
+    </section>
+    <section class="section grid-4">
+      <div class="dash-card"><strong>Сейчас</strong><span class="current-user-name"></span></div>
+      <div class="dash-card"><strong>Баланс</strong><span class="current-user-balance"></span></div>
+      <div class="dash-card"><strong>Звание</strong><span class="current-user-rank"></span></div>
+      <div class="dash-card"><strong>Статус</strong><span>Активен</span></div>
+    </section>
+    <section class="section grid-3">
+      <div class="panel-card">
+        <h2>Быстрый обзор</h2>
+        <div id="quick-stats"></div>
+      </div>
+      <div class="panel-card">
+        <h2>Последние сообщения</h2>
+        <div id="recent-chat"></div>
+      </div>
+      <div class="panel-card">
+        <h2>Уведомления</h2>
+        <div id="recent-notifications"></div>
+      </div>
+    </section>
+    <section class="section panel-card">
+      <h2>Достижения</h2>
+      <div id="recent-achievements"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

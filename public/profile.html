@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARES | Профиль</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-profile">
+  <header class="site-header">
+    <a class="brand" href="dashboard.html">ARES</a>
+    <nav class="main-nav">
+      <a href="dashboard.html">Домашняя</a>
+      <a href="profile.html" class="active">Профиль</a>
+      <a href="chat.html">Чат</a>
+      <a href="feed.html">Лента</a>
+      <a href="friends.html">Друзья</a>
+      <a href="shop.html">Магазин</a>
+      <a href="admin.html" id="adminLink">Админ</a>
+    </nav>
+    <button class="btn btn-secondary" id="logoutBtn">Выйти</button>
+  </header>
+  <main class="page-shell">
+    <section class="section profile-top">
+      <div class="profile-preview-card">
+        <div id="profile-preview-avatar" class="profile-preview-avatar">AR</div>
+        <div>
+          <h1 id="profile-preview-name">Игрок</h1>
+          <p id="profile-preview-rank">Новобранец</p>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div><span>ID</span><strong id="profile-id"></strong></div>
+        <div><span>Роль</span><strong id="profile-role"></strong></div>
+        <div><span>Опыт</span><strong id="profile-experience"></strong></div>
+        <div><span>Кредитов</span><strong id="profile-currency"></strong></div>
+      </div>
+    </section>
+    <section class="section grid-2">
+      <div class="panel-card">
+        <h2>Настройки</h2>
+        <label>Никнейм <input id="profile-username" disabled /></label>
+        <label>Аватар <input id="profile-avatar" /></label>
+        <label>Цвет ника <input id="profile-color" type="color" /></label>
+        <label>Шрифт <input id="profile-font" placeholder="Шрифт" /></label>
+        <label>Фон <input id="profile-background" placeholder="dark-fire или dark" /></label>
+        <label>Эффекты <input id="profile-effects" placeholder="glow или none" /></label>
+        <label>О себе <textarea id="profile-about" rows="4"></textarea></label>
+        <label>Любимая техника <input id="profile-favorite" placeholder="T-34, Maus" /></label>
+        <button class="btn btn-primary" id="saveProfileBtn">Сохранить профиль</button>
+      </div>
+      <div class="panel-card">
+        <h2>Достижения</h2>
+        <div id="profile-achievements"></div>
+      </div>
+    </section>
+    <section class="section panel-card">
+      <h2>Синхронизация данных</h2>
+      <div style="display: grid; gap: 14px;">
+        <div style="background: rgba(255,255,255,0.04); padding: 16px; border-radius: 16px; border-left: 3px solid var(--accent);">
+          <p style="margin: 0 0 12px; color: var(--muted);">Сохраняйте данные на GitHub с шифрованием вместо браузера.</p>
+          <label>GitHub Токен <input id="github-token-new" type="password" placeholder="ghp_xxxxx" /></label>
+          <label>Пароль шифрования <input id="encrypt-password-new" type="password" placeholder="Безопасный пароль" /></label>
+          <button class="btn btn-secondary" id="setupGithubProfileBtn">Подключить GitHub</button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <button class="btn btn-secondary" id="syncToGithubProfileBtn">💾 Сохранить на GitHub</button>
+          <button class="btn btn-secondary" id="syncFromGithubProfileBtn">📥 Загрузить с GitHub</button>
+        </div>
+        <p id="github-status" style="color: var(--muted); font-size: 0.9rem; margin: 0;">GitHub: <span id="github-status-text">не подключен</span></p>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

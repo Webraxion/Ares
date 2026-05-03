@@ -3,103 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ARES Clan Hub</title>
+  <title>ARES | Закрытый мир клана</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <div id="app">
-    <div class="hero-panel">
-      <div class="hero-overlay"></div>
-      <div class="logo-block">
-        <div class="logo-symbol">ARES</div>
-        <div class="logo-text">Закрытый цифровой мир клана</div>
-      </div>
-      <div id="welcome" class="welcome-card">
-        <h1>Добро пожаловать в ARES</h1>
-        <p>Зарегистрируйся, создай профиль, общайся в реальном времени и управляй своим статусом внутри клана.</p>
-        <div class="welcome-buttons">
-          <button id="show-login" class="btn btn-primary">Вход</button>
-          <button id="show-register" class="btn btn-secondary">Регистрация</button>
+<body class="page-index">
+  <div class="hero-panel">
+    <div class="hero-overlay"></div>
+    <header class="page-header">
+      <a class="brand" href="index.html">ARES</a>
+      <nav class="top-nav">
+        <a href="index.html" class="active">Вход</a>
+      </nav>
+    </header>
+    <div class="hero-content">
+      <div class="hero-copy">
+        <span class="eyebrow">Цифровой мир клана</span>
+        <h1>ARES — убежище в тени боя</h1>
+        <p>Создай аккаунт, получи уникальный ID, войди в атмосферу огня и стали, общайся с кланом и управляй своей репутацией.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="show-login">Войти</button>
+          <button class="btn btn-secondary" id="show-register">Регистрация</button>
         </div>
+      </div>
+      <div class="hero-form">
+        <div class="auth-card login-block">
+          <h2>Вход в ARES</h2>
+          <label>Никнейм<input id="loginUsername" /></label>
+          <label>Пароль<input id="loginPassword" type="password" /></label>
+          <button class="btn btn-primary" id="loginBtn">Войти</button>
+          <p>Админ: <strong>Admin</strong> / <strong>Wolodymer1994</strong></p>
+          <p class="link" id="switch-to-register">Создать аккаунт</p>
+        </div>
+        <div class="auth-card register-block hidden">
+          <h2>Регистрация</h2>
+          <label>Никнейм<input id="registerUsername" /></label>
+          <label>Пароль<input id="registerPassword" type="password" /></label>
+          <button class="btn btn-primary" id="registerBtn">Зарегистрироваться</button>
+          <p class="link" id="switch-to-login">Уже есть аккаунт</p>
+        </div>
+        <div class="auth-card hidden" id="github-block">
+          <h2 style="font-size: 0.95rem; margin-bottom: 16px;">Синхронизация через GitHub</h2>
+          <p style="color: var(--muted); font-size: 0.9rem; margin: 0 0 12px;">Сохраняйте зашифрованные данные на GitHub Gists вместо браузера. Требуется GitHub токен.</p>
+          <label>GitHub Токен<input id="githubToken" type="password" placeholder="ghp_xxxxx" /></label>
+          <label>Пароль шифрования<input id="encryptPassword" type="password" placeholder="Безопасный пароль" /></label>
+          <button class="btn btn-secondary" id="setupGithubBtn" style="width: 100%; margin-top: 12px;">Подключить GitHub</button>
+        </div>
+      </div>
+      <div class="github-link" style="margin-top: 20px; text-align: center; color: var(--muted); font-size: 0.9rem;">
+        <p><a href="#" id="toggle-github" style="color: var(--accent); cursor: pointer;">Синхронизация через GitHub</a></p>
       </div>
     </div>
-
-    <div id="auth-panel" class="modal hidden">
-      <div class="modal-card">
-        <button class="close-btn" id="hide-auth">×</button>
-        <div id="auth-forms"></div>
-      </div>
-    </div>
-
-    <main id="dashboard" class="dashboard hidden">
-      <section class="profile-panel">
-        <div class="section-header"><h2>Личный кабинет</h2><button id="logoutBtn" class="btn btn-secondary">Выйти</button></div>
-        <div class="profile-grid">
-          <div class="profile-card">
-            <div id="profile-avatar" class="profile-avatar">A</div>
-            <div>
-              <h3 id="profile-name">Игрок</h3>
-              <p id="profile-rank">Звание: Новобранец</p>
-              <p id="profile-id">ID: —</p>
-              <p id="profile-role">Роль: Участник</p>
-            </div>
-          </div>
-          <div class="profile-settings">
-            <h3>Настройки профиля</h3>
-            <label>Аватар <input id="profile-avatar-input" placeholder="ares-sigil" /></label>
-            <label>Цвет ника <input id="profile-color-input" placeholder="#ff6a00" /></label>
-            <label>Шрифт <input id="profile-font-input" placeholder="steel" /></label>
-            <label>Фон профиля <input id="profile-bg-input" placeholder="dark-fire" /></label>
-            <label>Эффекты <input id="profile-effects-input" placeholder="glow" /></label>
-            <label>О себе <textarea id="profile-about-input" rows="3" placeholder="Любимая техника, звания, активность..."></textarea></label>
-            <label>Любимая техника <input id="profile-tank-input" placeholder="T-34, Maus, E 100" /></label>
-            <button id="saveProfileBtn" class="btn btn-primary">Сохранить</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-header"><h2>Клановый чат</h2></div>
-        <div class="chat-panel">
-          <div id="chatMessages" class="chat-messages"></div>
-          <div class="chat-form">
-            <input id="chatInput" placeholder="Напиши сообщение в общий чат..." />
-            <button id="sendChatBtn" class="btn btn-primary">Отправить</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="section mini-columns">
-        <div class="panel-card">
-          <h3>Лента</h3>
-          <div id="postsList" class="posts-list"></div>
-          <textarea id="postText" rows="2" placeholder="Поделиться моментом..."></textarea>
-          <button id="postBtn" class="btn btn-primary">Опубликовать</button>
-        </div>
-        <div class="panel-card">
-          <h3>Уведомления</h3>
-          <div id="notificationsList" class="notifications-list"></div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-header"><h2>Экономика и магазин</h2></div>
-        <div class="economy-panel">
-          <div class="currency-card">
-            <div>Баланс</div>
-            <div id="currencyValue" class="currency-value">0</div>
-          </div>
-          <div id="shopList" class="shop-list"></div>
-        </div>
-      </section>
-
-      <section id="adminPanel" class="section hidden">
-        <div class="section-header"><h2>Панель администратора</h2></div>
-        <div id="adminUsers" class="admin-users"></div>
-      </section>
-    </main>
   </div>
-
   <script src="app.js"></script>
 </body>
 </html>

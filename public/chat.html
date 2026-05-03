@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARES | Чат</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-chat">
+  <header class="site-header">
+    <a class="brand" href="dashboard.html">ARES</a>
+    <nav class="main-nav">
+      <a href="dashboard.html">Домашняя</a>
+      <a href="profile.html">Профиль</a>
+      <a href="chat.html" class="active">Чат</a>
+      <a href="feed.html">Лента</a>
+      <a href="friends.html">Друзья</a>
+      <a href="shop.html">Магазин</a>
+      <a href="admin.html" id="adminLink">Админ</a>
+    </nav>
+    <button class="btn btn-secondary" id="logoutBtn">Выйти</button>
+  </header>
+  <main class="page-shell grid-2">
+    <section class="section panel-card chat-section">
+      <h2>Общий чат клана</h2>
+      <div id="public-chat-messages" class="chat-window"></div>
+      <div class="chat-actions">
+        <textarea id="publicChatText" rows="2" placeholder="Напишите сообщение..."></textarea>
+        <button class="btn btn-primary" id="sendChatBtn">Отправить</button>
+      </div>
+    </section>
+    <section class="section panel-card chat-section">
+      <h2>Личные сообщения</h2>
+      <div class="friend-picker">
+        <button class="btn btn-secondary" id="openDmBtn">Открыть диалог по ID</button>
+        <input id="directTargetId" placeholder="ID игрока" />
+      </div>
+      <div id="direct-friends" class="friends-list"></div>
+      <div class="direct-chat-card">
+        <div class="direct-chat-header">Диалог с <strong id="direct-with">...</strong></div>
+        <div id="directMessagesList" class="chat-window"></div>
+        <textarea id="directChatText" rows="2" placeholder="Сообщение..." ></textarea>
+        <button class="btn btn-primary" id="sendDirectBtn">Отправить</button>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

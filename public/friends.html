@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARES | Друзья</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-friends">
+  <header class="site-header">
+    <a class="brand" href="dashboard.html">ARES</a>
+    <nav class="main-nav">
+      <a href="dashboard.html">Домашняя</a>
+      <a href="profile.html">Профиль</a>
+      <a href="chat.html">Чат</a>
+      <a href="feed.html">Лента</a>
+      <a href="friends.html" class="active">Друзья</a>
+      <a href="shop.html">Магазин</a>
+      <a href="admin.html" id="adminLink">Админ</a>
+    </nav>
+    <button class="btn btn-secondary" id="logoutBtn">Выйти</button>
+  </header>
+  <main class="page-shell grid-2">
+    <section class="section panel-card">
+      <h2>Мои друзья</h2>
+      <div class="friend-summary">
+        <div><span>Твой ID</span><strong id="friend-user-id"></strong></div>
+        <div><span>Твой ник</span><strong id="friend-user-name"></strong></div>
+      </div>
+      <div id="friendList"></div>
+      <div class="friend-action">
+        <input id="friendTargetId" placeholder="ID игрока" />
+        <button class="btn btn-primary" id="sendRequestBtn">Отправить заявку</button>
+      </div>
+    </section>
+    <section class="section panel-card">
+      <h2>Заявки в друзья</h2>
+      <div id="incomingRequests"></div>
+      <button class="btn btn-secondary" id="acceptRequestsBtn">Принять все</button>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
