@@ -22,7 +22,7 @@ const state = {
 
 let autoSyncTimeout = null;
 const page = window.location.pathname.split('/').pop() || 'index.html';
-const ROOT_PATH = window.location.pathname.includes('/pages/') ? '../' : '';
+const ROOT_PATH = window.location.pathname.includes('/pages/') ? '../' : 'pages/';
 
 // Криптография и GitHub интеграция
 async function deriveKey(password) {
