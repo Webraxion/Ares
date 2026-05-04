@@ -21,8 +21,10 @@ const state = {
 };
 
 let autoSyncTimeout = null;
-const page = window.location.pathname.split('/').pop() || 'index.html';
-const ROOT_PATH = window.location.pathname.includes('/pages/') ? '../' : 'pages/';
+const currentPath = window.location.pathname;
+const rawPage = currentPath.split('/').pop();
+const page = (!rawPage || rawPage === '' || !rawPage.includes('.')) ? 'index.html' : rawPage;
+const ROOT_PATH = currentPath.includes('/pages/') ? '../' : 'pages/';
 
 // Криптография и GitHub интеграция
 async function deriveKey(password) {
@@ -262,22 +264,26 @@ function initData() {
   }
 
   // Загрузка с GitHub в фоне (если подключен)
-  if (GITHUB_CONFIG.token && GITHUB_CONFIG.gistId && GITHUB_CONFIG.password) {
-    loadFromGitHub(GITHUB_CONFIG.password).then(data => {
-      if (data) {
-        state.users = data.users;
-        state.messages = data.messages;
-        state.direct = data.direct;
-        state.posts = data.posts;
-        state.comments = data.comments;
-        state.notifications = data.notifications;
-        state.requests = data.requests;
-        state.shop = data.shop;
-        state.achievements = data.achievements;
-        persist();
-        location.reload(); // Перезагрузить страницу с актуальными данными
-      }
-    }).catch(e => console.log('GitHub load on init failed:', e));
+  if (GITHUB_CONFIG.token && GITHUB_CONFIG.password) {
+    if (GITHUB_CONFIG.gistId) {
+      loadFromGitHub(GITHUB_CONFIG.password).then(data => {
+        if (data) {
+          state.users = data.users;
+          state.messages = data.messages;
+          state.direct = data.direct;
+          state.posts = data.posts;
+          state.comments = data.comments;
+          state.notifications = data.notifications;
+          state.requests = data.requests;
+          state.shop = data.shop;
+          state.achievements = data.achievements;
+          persist();
+          location.reload(); // Перезагрузить страницу с актуальными данными
+        }
+      }).catch(e => console.log('GitHub load on init failed:', e));
+    } else {
+      persistToGitHub().catch(e => console.log('GitHub create gist on init failed:', e));
+    }
   }
 
   if (page === 'index.html' && currentUser()) {
@@ -464,11 +470,13 @@ function initIndex() {
   }
 
   if (setupGithubBtn) {
-    setupGithubBtn.addEventListener('click', () => {
+    setupGithubBtn.addEventListener('click', async () => {
       const token = document.getElementById('githubToken').value.trim();
       const password = document.getElementById('encryptPassword').value.trim();
       if (!token || !password) return showToast('Заполните оба поля');
       setGitHubCredentials(token, password);
+      const success = await persistToGitHub();
+      if (success) showToast('База данных синхронизирована на GitHub');
       setTimeout(() => githubBlock.classList.add('hidden'), 800);
     });
   }
