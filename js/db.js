@@ -15,7 +15,11 @@ const DEFAULT_SHOP = [
   { id: 'item-avatar-ares', name: 'Аватар ARES', description: 'Уникальная эмблема профиля, пробуждающая уважение.', price: 300, rarity: 'Редкое' },
   { id: 'item-bg-fire', name: 'Фон "Огненная броня"', description: 'Огненный фон для профиля и мощной истории.', price: 500, rarity: 'Эпическое' },
   { id: 'item-effect-glow', name: 'Свечение ника', description: 'Эффект свечения для ника в чате и профиле.', price: 450, rarity: 'Эпическое' },
-  { id: 'item-font-metal', name: 'Шрифт "Стальной"', description: 'Кастомный шрифт для ника, похожий на броню.', price: 250, rarity: 'Редкое' }
+  { id: 'item-font-metal', name: 'Шрифт "Стальной"', description: 'Кастомный шрифт для ника, похожий на броню.', price: 250, rarity: 'Редкое' },
+  { id: 'item-badge-commander', name: 'Значок Командира', description: 'Эксклюзивный значок ранга для профиля и списка друзей.', price: 650, rarity: 'Легендарное' },
+  { id: 'item-voice-burst', name: 'Голосовая подпись', description: 'Специальный звук при входе в чат и отправке сообщений.', price: 520, rarity: 'Эпическое' },
+  { id: 'item-frame-steel', name: 'Рамка Steel', description: 'Металлическая рамка вокруг аватара и сообщений.', price: 400, rarity: 'Редкое' },
+  { id: 'item-sigil-night', name: 'Сигил Ночи', description: 'Тёмный знак с подсветкой для профиля.', price: 550, rarity: 'Эпическое' }
 ];
 
 const DEFAULT_ACHIEVEMENTS = [

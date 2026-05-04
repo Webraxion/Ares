@@ -42,9 +42,9 @@
         <label>Никнейм <input id="profile-username" disabled /></label>
         <label>Аватар <input id="profile-avatar" /></label>
         <label>Цвет ника <input id="profile-color" type="color" /></label>
-        <label>Шрифт <input id="profile-font" placeholder="Шрифт" /></label>
-        <label>Фон <input id="profile-background" placeholder="dark-fire или dark" /></label>
-        <label>Эффекты <input id="profile-effects" placeholder="glow или none" /></label>
+          <label>Шрифт <select id="profile-font"><option value="Segoe UI">Segoe UI</option><option value="Arial Black">Arial Black</option><option value="Courier New">Courier New</option><option value="Lucida Console">Lucida Console</option></select></label>
+          <label>Фон <select id="profile-background"><option value="dark">Тёмный</option><option value="dark-fire">Огненный</option><option value="storm">Шторм</option><option value="carbon">Углерод</option></select></label>
+          <label>Эффекты <select id="profile-effects"><option value="none">Нет</option><option value="glow">Сияние</option><option value="spark">Искра</option><option value="aura">Аура</option></select></label>
         <label>О себе <textarea id="profile-about" rows="4"></textarea></label>
         <label>Любимая техника <input id="profile-favorite" placeholder="T-34, Maus" /></label>
         <button class="btn btn-primary" id="saveProfileBtn">Сохранить профиль</button>
@@ -59,7 +59,7 @@
       <div style="display: grid; gap: 14px;">
         <div style="background: rgba(255,255,255,0.04); padding: 16px; border-radius: 16px; border-left: 3px solid var(--accent);">
           <p style="margin: 0 0 12px; color: var(--muted);">Сохраняйте данные на GitHub с шифрованием вместо браузера.</p>
-          <label>GitHub Токен <input id="github-token-new" type="password" placeholder="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" /></label>
+          <label>GitHub Токен <input id="github-token-new" type="password" placeholder="your_github_token_here" /></label>
           <label>Пароль шифрования <input id="encrypt-password-new" type="password" placeholder="Безопасный пароль" /></label>
           <button class="btn btn-secondary" id="setupGithubProfileBtn">Подключить GitHub</button>
         </div>

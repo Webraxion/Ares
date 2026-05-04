@@ -34,6 +34,11 @@
       <div class="hero-sync">
         <button class="btn btn-secondary" id="syncToGithubBtn" title="Сохранить зашифрованные данные на GitHub">💾 GitHub</button>
         <button class="btn btn-secondary" id="syncFromGithubBtn" title="Загрузить данные с GitHub">📥 GitHub</button>
+        <span id="github-sync-status" class="status-pill">GitHub: отключён</span>
+      </div>
+      <div class="daily-block">
+        <button class="btn btn-primary" id="claimDailyBtn">Забрать ежедневную награду +100</button>
+        <p id="dailyRewardStatus">Награда доступна каждый день после 24:00.</p>
       </div>
     </section>
     <section class="section grid-4">
@@ -42,7 +47,7 @@
       <div class="dash-card"><strong>Звание</strong><span class="current-user-rank"></span></div>
       <div class="dash-card"><strong>Статус</strong><span>Активен</span></div>
     </section>
-    <section class="section grid-3">
+    <section class="section grid-4">
       <div class="panel-card">
         <h2>Быстрый обзор</h2>
         <div id="quick-stats"></div>
@@ -50,6 +55,10 @@
       <div class="panel-card">
         <h2>Последние сообщения</h2>
         <div id="recent-chat"></div>
+      </div>
+      <div class="panel-card">
+        <h2>Новые посты</h2>
+        <div id="recent-posts"></div>
       </div>
       <div class="panel-card">
         <h2>Уведомления</h2>

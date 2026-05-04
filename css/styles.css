@@ -37,7 +37,12 @@ button { cursor: pointer; }
 .hero-copy h1 { margin: 18px 0; font-size: clamp(2.8rem, 5vw, 4.4rem); line-height: 1.05; }
 .hero-copy p { max-width: 660px; color: var(--muted); line-height: 1.75; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 28px; }
-.hero-sync { display: flex; gap: 10px; margin-top: 26px; justify-content: flex-start; }
+.hero-sync { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; justify-content: flex-start; align-items: center; }
+.status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.12); font-size: 0.95rem; }
+.daily-block { display: grid; gap: 10px; margin-top: 20px; }
+.daily-block .btn-primary { width: fit-content; }
+.panel-note { color: var(--muted); margin-bottom: 16px; }
+.shop-balance { margin-bottom: 16px; font-weight: 700; }
 .hero-form { padding: 32px; }
 .auth-card { display: grid; gap: 16px; }
 .auth-card h2 { margin: 0; font-size: 1.4rem; }

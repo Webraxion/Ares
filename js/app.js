@@ -223,7 +223,41 @@ async function persistToGitHub() {
   return await saveToGitHub(allData, GITHUB_CONFIG.password);
 }
 
-function initData() {
+function canClaimDaily(user) {
+  if (!user) return false;
+  const last = user.lastDailyClaim ? new Date(user.lastDailyClaim).getTime() : 0;
+  return Date.now() - last >= 24 * 60 * 60 * 1000;
+}
+
+function getDailyRewardLabel(user) {
+  if (!user) return 'Награда доступна при входе в систему.';
+  if (canClaimDaily(user)) return 'Ежедневная награда доступна.';
+  const next = new Date(new Date(user.lastDailyClaim).getTime() + 24 * 60 * 60 * 1000);
+  return `Следующая награда: ${next.toLocaleString('ru-RU', { hour12: false })}`;
+}
+
+function claimDailyReward() {
+  const user = currentUser();
+  if (!user) return;
+  if (!canClaimDaily(user)) {
+    showToast('Ежедневная награда уже получена сегодня.');
+    return;
+  }
+  user.currency += 100;
+  user.lastDailyClaim = new Date().toISOString();
+  state.notifications.unshift({
+    id: generateId('note'),
+    userId: user.id,
+    type: 'Бонус',
+    text: 'Ежедневная награда получена: +100 кредитов',
+    createdAt: new Date().toISOString()
+  });
+  persist();
+  renderDashboard();
+  showToast('Ежедневная награда получена! +100 кредитов');
+}
+
+async function initData() {
   state.users = loadStorage(DB.users, []);
   state.messages = loadStorage(DB.messages, []);
   state.direct = loadStorage(DB.direct, []);
@@ -266,23 +300,27 @@ function initData() {
   // Загрузка с GitHub в фоне (если подключен)
   if (GITHUB_CONFIG.token && GITHUB_CONFIG.password) {
     if (GITHUB_CONFIG.gistId) {
-      loadFromGitHub(GITHUB_CONFIG.password).then(data => {
+      try {
+        const data = await loadFromGitHub(GITHUB_CONFIG.password);
         if (data) {
-          state.users = data.users;
-          state.messages = data.messages;
-          state.direct = data.direct;
-          state.posts = data.posts;
-          state.comments = data.comments;
-          state.notifications = data.notifications;
-          state.requests = data.requests;
-          state.shop = data.shop;
-          state.achievements = data.achievements;
+          state.users = data.users || state.users;
+          state.messages = data.messages || state.messages;
+          state.direct = data.direct || state.direct;
+          state.posts = data.posts || state.posts;
+          state.comments = data.comments || state.comments;
+          state.notifications = data.notifications || state.notifications;
+          state.requests = data.requests || state.requests;
+          state.shop = data.shop || state.shop;
+          state.achievements = data.achievements || state.achievements;
           persist();
           location.reload(); // Перезагрузить страницу с актуальными данными
+          return;
         }
-      }).catch(e => console.log('GitHub load on init failed:', e));
+      } catch (e) {
+        console.log('GitHub load on init failed:', e);
+      }
     } else {
-      persistToGitHub().catch(e => console.log('GitHub create gist on init failed:', e));
+      await persistToGitHub().catch(e => console.log('GitHub create gist on init failed:', e));
     }
   }
 
@@ -428,6 +466,10 @@ function renderBaseLayout() {
   }
   const rank = document.querySelector('.current-user-rank');
   if (rank) rank.textContent = `${user.rank}`;
+  const syncStatus = document.getElementById('github-sync-status');
+  if (syncStatus) {
+    syncStatus.textContent = GITHUB_CONFIG.token ? `GitHub: ${GITHUB_CONFIG.gistId ? 'синхронизирован' : 'подключён'}` : 'GitHub: отключён';
+  }
 }
 
 function initIndex() {
@@ -489,6 +531,7 @@ function initDashboard() {
   bindLogout();
   const syncToBtn = document.getElementById('syncToGithubBtn');
   const syncFromBtn = document.getElementById('syncFromGithubBtn');
+  const claimBtn = document.getElementById('claimDailyBtn');
   if (syncToBtn) syncToBtn.addEventListener('click', () => persistToGitHub());
   if (syncFromBtn) syncFromBtn.addEventListener('click', async () => {
     if (!GITHUB_CONFIG.token || !GITHUB_CONFIG.gistId || !GITHUB_CONFIG.password) {
@@ -511,6 +554,7 @@ function initDashboard() {
       showToast('Данные загружены с GitHub');
     }
   });
+  if (claimBtn) claimBtn.addEventListener('click', claimDailyReward);
 }
 
 function renderDashboard() {
@@ -521,6 +565,7 @@ function renderDashboard() {
   const recentPosts = document.getElementById('recent-posts');
   const notifications = document.getElementById('recent-notifications');
   const achievements = document.getElementById('recent-achievements');
+  const dailyStatus = document.getElementById('dailyRewardStatus');
 
   quick.innerHTML = `
     <div class="dash-card"><strong>Звание</strong><span>${user.rank}</span></div>
@@ -528,6 +573,7 @@ function renderDashboard() {
     <div class="dash-card"><strong>Друзей</strong><span>${user.friends.length}</span></div>
     <div class="dash-card"><strong>Баланс</strong><span>${user.currency} кредитов</span></div>
   `;
+  if (dailyStatus) dailyStatus.textContent = getDailyRewardLabel(user);
 
   recentMessages.innerHTML = state.messages.slice(-5).reverse().map(msg => `
     <div class="mini-row"><strong>${escapeHtml(msg.authorName)}</strong> ${escapeHtml(msg.text.slice(0, 60))}</div>
@@ -608,10 +654,14 @@ function renderProfilePage() {
   document.getElementById('profile-username').textContent = user.username;
   document.getElementById('profile-id').textContent = user.id;
   document.getElementById('profile-role').textContent = user.role === 'admin' ? 'Администратор' : user.role === 'curator' ? 'Куратор' : 'Участник';
-  document.getElementById('profile-color').value = user.color;
-  document.getElementById('profile-font').value = user.font;
-  document.getElementById('profile-background').value = user.background;
-  document.getElementById('profile-effects').value = user.effects;
+  const profileColor = document.getElementById('profile-color');
+  const profileFont = document.getElementById('profile-font');
+  const profileBackground = document.getElementById('profile-background');
+  const profileEffects = document.getElementById('profile-effects');
+  if (profileColor) profileColor.value = user.color;
+  if (profileFont) profileFont.value = user.font;
+  if (profileBackground) profileBackground.value = user.background;
+  if (profileEffects) profileEffects.value = user.effects;
   document.getElementById('profile-about').value = user.about;
   document.getElementById('profile-experience').textContent = user.experience;
   document.getElementById('profile-favorite').value = user.favoriteTank;
@@ -626,10 +676,10 @@ function saveProfilePage() {
   const user = currentUser();
   if (!user) return;
   user.avatar = document.getElementById('profile-avatar').value.trim() || user.avatar;
-  user.color = document.getElementById('profile-color').value.trim() || user.color;
-  user.font = document.getElementById('profile-font').value.trim() || user.font;
-  user.background = document.getElementById('profile-background').value.trim() || user.background;
-  user.effects = document.getElementById('profile-effects').value.trim() || user.effects;
+  user.color = document.getElementById('profile-color').value || user.color;
+  user.font = document.getElementById('profile-font').value || user.font;
+  user.background = document.getElementById('profile-background').value || user.background;
+  user.effects = document.getElementById('profile-effects').value || user.effects;
   user.about = document.getElementById('profile-about').value.trim();
   user.favoriteTank = document.getElementById('profile-favorite').value.trim();
   persist();
@@ -1023,8 +1073,8 @@ function handleStorageEvent(event) {
 
 window.addEventListener('storage', handleStorageEvent);
 
-function initPage() {
-  initData();
+async function initPage() {
+  await initData();
   if (page === 'index.html') initIndex();
   if (page === 'dashboard.html') initDashboard();
   if (page === 'profile.html') initProfile();
