@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARES | Магазин</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body class="page-shop">
+  <header class="site-header">
+    <a class="brand" href="dashboard.html">ARES</a>
+    <nav class="main-nav">
+      <a href="dashboard.html">Домашняя</a>
+      <a href="profile.html">Профиль</a>
+      <a href="chat.html">Чат</a>
+      <a href="feed.html">Лента</a>
+      <a href="friends.html">Друзья</a>
+      <a href="shop.html" class="active">Магазин</a>
+      <a href="admin.html" id="adminLink">Админ</a>
+    </nav>
+    <button class="btn btn-secondary" id="logoutBtn">Выйти</button>
+  </header>
+  <main class="page-shell grid-2">
+    <section class="section panel-card">
+      <h2>Магазин ARES</h2>
+      <div class="shop-balance">Баланс: <strong id="shop-balance"></strong></div>
+      <div id="shopItems" class="shop-grid"></div>
+    </section>
+    <section class="section panel-card">
+      <h2>Инвентарь</h2>
+      <div id="shopInventory" class="shop-grid"></div>
+    </section>
+  </main>
+<script src="../js/db.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

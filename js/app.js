@@ -22,6 +22,7 @@ const state = {
 
 let autoSyncTimeout = null;
 const page = window.location.pathname.split('/').pop() || 'index.html';
+const ROOT_PATH = window.location.pathname.includes('/pages/') ? '../' : '';
 
 // Криптография и GitHub интеграция
 async function deriveKey(password) {
@@ -181,7 +182,7 @@ function currentUser() {
 
 function requireLogin() {
   if (!currentUser()) {
-    window.location.href = 'index.html';
+    window.location.href = ROOT_PATH + 'index.html';
   }
 }
 
@@ -280,7 +281,7 @@ function initData() {
   }
 
   if (page === 'index.html' && currentUser()) {
-    window.location.href = 'dashboard.html';
+    window.location.href = ROOT_PATH + 'dashboard.html';
   }
 }
 
@@ -329,7 +330,7 @@ function login(username, password) {
   user.lastSeen = new Date().toISOString();
   persist();
   showToast(`Добро пожаловать, ${user.username}`);
-  window.location.href = 'dashboard.html';
+  window.location.href = ROOT_PATH + 'dashboard.html';
 }
 
 function register(username, password) {
@@ -369,7 +370,7 @@ function register(username, password) {
   awardAchievement(user.id, 'achv-1');
   persist();
   showToast('Аккаунт создан. Добро пожаловать в ARES!');
-  window.location.href = 'dashboard.html';
+  window.location.href = ROOT_PATH + 'dashboard.html';
 }
 
 function awardAchievement(userId, achievementId) {
@@ -922,7 +923,7 @@ function renderAdminPage() {
   const user = currentUser();
   if (!user || (user.role !== 'admin' && user.role !== 'curator')) {
     showToast('Доступ запрещён');
-    window.location.href = 'dashboard.html';
+    window.location.href = ROOT_PATH + 'dashboard.html';
     return;
   }
   const container = document.getElementById('adminUsers');
@@ -996,7 +997,7 @@ function bindLogout() {
   if (logoutBtn) logoutBtn.addEventListener('click', () => {
     saveSession(null);
     showToast('Вы вышли из аккаунта');
-    window.location.href = 'index.html';
+    window.location.href = ROOT_PATH + 'index.html';
   });
 }
 
