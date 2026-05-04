@@ -189,22 +189,26 @@ function requireLogin() {
 }
 
 function persist() {
-  saveStorage(DB.users, state.users);
-  saveStorage(DB.messages, state.messages);
-  saveStorage(DB.direct, state.direct);
-  saveStorage(DB.posts, state.posts);
-  saveStorage(DB.comments, state.comments);
-  saveStorage(DB.notifications, state.notifications);
-  saveStorage(DB.requests, state.requests);
-  saveStorage(DB.shop, state.shop);
-  saveStorage(DB.achievements, state.achievements);
-  
-  // Автосохранение на GitHub с дебаунсом
+  // Если GitHub подключён, всё основное храним в зашифрованном гисте.
+  // Локальное хранилище оставляем только для сессии и резервной копии при отключении GitHub.
+  if (!GITHUB_CONFIG.token || !GITHUB_CONFIG.password) {
+    saveStorage(DB.users, state.users);
+    saveStorage(DB.messages, state.messages);
+    saveStorage(DB.direct, state.direct);
+    saveStorage(DB.posts, state.posts);
+    saveStorage(DB.comments, state.comments);
+    saveStorage(DB.notifications, state.notifications);
+    saveStorage(DB.requests, state.requests);
+    saveStorage(DB.shop, state.shop);
+    saveStorage(DB.achievements, state.achievements);
+  }
+  saveStorage(DB.session, state.currentUserId);
+
   if (GITHUB_CONFIG.token && GITHUB_CONFIG.password) {
     clearTimeout(autoSyncTimeout);
     autoSyncTimeout = setTimeout(() => {
       persistToGitHub().catch(e => console.error('Auto-sync error:', e));
-    }, 3000); // Сохранить на GitHub через 3 секунды после последнего изменения
+    }, 3000);
   }
 }
 
@@ -313,13 +317,14 @@ async function initData() {
           state.shop = data.shop || state.shop;
           state.achievements = data.achievements || state.achievements;
           persist();
-          location.reload(); // Перезагрузить страницу с актуальными данными
+          location.reload();
           return;
         }
       } catch (e) {
         console.log('GitHub load on init failed:', e);
       }
     } else {
+      // Если GitHub подключён, но гист ещё не создан, создаём его и переносим данные туда.
       await persistToGitHub().catch(e => console.log('GitHub create gist on init failed:', e));
     }
   }
